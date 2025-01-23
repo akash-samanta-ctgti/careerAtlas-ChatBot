@@ -1,23 +1,28 @@
 <div class="chat-container">
   <div class="chat-history">
-    <div *ngFor="let chat of chatHistory" class="chat-message">
-      <div class="user-message">
-        <strong>User:</strong> {{ chat.user }}
+    <div *ngFor="let chat of chatHistory">
+      <!-- User's message on the right side -->
+      <div *ngIf="chat.user" class="user-message chat-message">
+        {{ chat.user }} <strong><i class="material-icons">keyboard_double_arrow_left</i> </strong>
+        <mat-icon class="user-icon">3p</mat-icon>
       </div>
-      <div *ngIf="chat.bot" class="bot-message">
-        <strong id="bot-response">Bot:</strong> {{ chat.bot }}
+
+      <!-- Bot's response on the left side -->
+      <div *ngIf="chat.bot" class="bot-message chat-message">
+        <mat-icon *ngIf="chat.bot === 'loading'" class="bot-icon">autorenew</mat-icon>
+        <mat-icon *ngIf="chat.bot !== 'loading'" class="bot-icon">adb</mat-icon>
+        <strong id="bot-response"> <i class="material-icons">keyboard_double_arrow_right</i> </strong> {{ chat.bot }}
       </div>
     </div>
   </div>
 
+
   <mat-form-field appearance="fill" class="chat-input">
     <mat-label>Type your message</mat-label>
-    <input
-      matInput
-      [(ngModel)]="chatMessage"
-      (keyup.enter)="sendMessage()"
-      placeholder="Enter message"
-    />
+    <input matInput [(ngModel)]="chatMessage" (keyup.enter)="sendMessage()" placeholder="Enter message" />
+    <button mat-icon-button matSuffix (click)="sendMessage()">
+      <mat-icon>volume_up</mat-icon>
+    </button>
     <button mat-icon-button matSuffix (click)="sendMessage()">
       <mat-icon>send</mat-icon>
     </button>

@@ -19,7 +19,7 @@ import { of } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
@@ -27,29 +27,49 @@ import { of } from 'rxjs';
 export class ChatComponent {
   chatMessage: string = '';
   chatHistory: { user: string; bot: string }[] = [];
+  private loadingInterval: any;
 
   constructor(private http: HttpClient) { }
 
   sendMessage() {
     if (this.chatMessage.trim()) {
-      this.chatHistory.push({ user: this.chatMessage, bot: '' });
+      const messageIndex = this.chatHistory.length;
+      this.chatHistory.push({ user: this.chatMessage, bot: 'loading' });
 
+      this.startLoadingAnimation(messageIndex);
       this.http
-        .post<{ response: string }>('https://api.example.com/chat', {
+        .post<{ response: string }>('https://my-api.com/chat', {
           message: this.chatMessage,
         })
         .pipe(
           catchError((error) => {
-            console.error('Error occurred:', error);  
-            this.chatHistory[this.chatHistory.length - 1].bot = 'Sorry, something went wrong. Please try again later.';  
-            return of({ response: 'demo response' });  
+            this.stopLoadingAnimation();
+            console.error('Error occurred:', error);
+            this.chatHistory[this.chatHistory.length - 1].bot =
+              'Sorry, something went wrong. Please try again later.';
+            return of({ response: 'demo response' });
           })
         )
         .subscribe((response) => {
+          this.stopLoadingAnimation();
           this.chatHistory[this.chatHistory.length - 1].bot = response.response;
         });
+
       this.chatMessage = '';
     }
   }
 
+  startLoadingAnimation(index: number) {
+    let dots = '';
+    this.loadingInterval = setInterval(() => {
+      dots = dots.length >= 3 ? '' : dots + '.';
+      this.chatHistory[index].bot = `loading${dots}`;
+    }, 200);
+  }
+
+  stopLoadingAnimation() {
+    if (this.loadingInterval) {
+      clearInterval(this.loadingInterval);
+    }
+  }
 }
