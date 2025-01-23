@@ -1,0 +1,25 @@
+<div class="chat-container">
+  <div class="chat-history">
+    <div *ngFor="let chat of chatHistory" class="chat-message">
+      <div class="user-message">
+        <strong>User:</strong> {{ chat.user }}
+      </div>
+      <div *ngIf="chat.bot" class="bot-message">
+        <strong id="bot-response">Bot:</strong> {{ chat.bot }}
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field appearance="fill" class="chat-input">
+    <mat-label>Type your message</mat-label>
+    <input
+      matInput
+      [(ngModel)]="chatMessage"
+      (keyup.enter)="sendMessage()"
+      placeholder="Enter message"
+    />
+    <button mat-icon-button matSuffix (click)="sendMessage()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
