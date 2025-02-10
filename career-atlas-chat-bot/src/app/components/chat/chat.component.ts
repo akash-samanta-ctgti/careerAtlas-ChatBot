@@ -19,17 +19,17 @@ import { of } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent {
   chatMessage: string = '';
-  chatHistory: { user: string; bot: string }[] = [];
+  chatHistory: { user: string; bot: string; tableHeaders?: any[]; tableData?: any[] }[] = [];
   private loadingInterval: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   sendMessage() {
     if (this.chatMessage.trim()) {
@@ -38,21 +38,30 @@ export class ChatComponent {
 
       this.startLoadingAnimation(messageIndex);
       this.http
-        .post<{ response: string }>('https://my-api.com/chat', {
-          message: this.chatMessage,
-        })
+        .post<any>('http://localhost:5000/processUserQuery', { message: this.chatMessage })
         .pipe(
           catchError((error) => {
             this.stopLoadingAnimation();
             console.error('Error occurred:', error);
-            this.chatHistory[this.chatHistory.length - 1].bot =
-              'Sorry, something went wrong. Please try again later.';
+            this.chatHistory[messageIndex].bot = 'Sorry, something went wrong. Please try again later.';
             return of({ response: 'demo response' });
           })
         )
         .subscribe((response) => {
           this.stopLoadingAnimation();
-          this.chatHistory[this.chatHistory.length - 1].bot = response.response;
+          
+          if (response.responseFormat && response.responseFormat.columns) {
+            // If response contains table format
+            this.chatHistory[messageIndex] = {
+              user: this.chatMessage,
+              bot: '',
+              tableHeaders: response.responseFormat.columns,
+              tableData: response.data
+            };
+          } else {
+            // Default text response
+            this.chatHistory[messageIndex].bot = response.response;
+          }
         });
 
       this.chatMessage = '';

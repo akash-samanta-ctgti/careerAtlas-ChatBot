@@ -1,21 +1,41 @@
 <div class="chat-container">
   <div class="chat-history">
     <div *ngFor="let chat of chatHistory">
-      <!-- User's message on the right side -->
+      <!-- User's message -->
       <div *ngIf="chat.user" class="user-message chat-message">
-        {{ chat.user }} <strong><i class="material-icons">keyboard_double_arrow_left</i> </strong>
+        {{ chat.user }} <strong><i class="material-icons">keyboard_double_arrow_left</i></strong>
         <mat-icon class="user-icon">3p</mat-icon>
       </div>
 
-      <!-- Bot's response on the left side -->
+      <!-- Bot's response (Text or Table) -->
       <div *ngIf="chat.bot" class="bot-message chat-message">
         <mat-icon *ngIf="chat.bot === 'loading'" class="bot-icon">autorenew</mat-icon>
         <mat-icon *ngIf="chat.bot !== 'loading'" class="bot-icon">adb</mat-icon>
-        <strong id="bot-response"> <i class="material-icons">keyboard_double_arrow_right</i> </strong> {{ chat.bot }}
+        <strong id="bot-response"> <i class="material-icons">keyboard_double_arrow_right</i> </strong>
+
+        <!-- Check if response contains a table -->
+        <ng-container *ngIf="chat.tableData; else textResponse">
+          <table>
+            <thead>
+              <tr>
+                <th *ngFor="let col of chat.tableHeaders">{{ col.columnDisplayName }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of chat.tableData">
+                <td *ngFor="let col of chat.tableHeaders">{{ row[col.columnName] || 'N/A' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+
+        <!-- Default Text Response -->
+        <ng-template #textResponse>
+          {{ chat.bot }}
+        </ng-template>
       </div>
     </div>
   </div>
-
 
   <mat-form-field appearance="fill" class="chat-input">
     <mat-label>Type your message</mat-label>
