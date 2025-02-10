@@ -8,7 +8,7 @@
       </div>
 
       <!-- Bot's response (Text or Table) -->
-      <div *ngIf="chat.bot" class="bot-message chat-message">
+      <div class="bot-message chat-message">
         <mat-icon *ngIf="chat.bot === 'loading'" class="bot-icon">autorenew</mat-icon>
         <mat-icon *ngIf="chat.bot !== 'loading'" class="bot-icon">adb</mat-icon>
         <strong id="bot-response"> <i class="material-icons">keyboard_double_arrow_right</i> </strong>
@@ -47,4 +47,11 @@
       <mat-icon>send</mat-icon>
     </button>
   </mat-form-field>
+  
+  <!-- Added User ID input field -->
+  <mat-form-field appearance="fill" class="user-id-input">
+    <mat-label>User ID</mat-label>
+    <input matInput [(ngModel)]="userId" placeholder="Enter your user ID" />
+  </mat-form-field>
+  
 </div>

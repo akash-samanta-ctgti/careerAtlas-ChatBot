@@ -1,0 +1,127 @@
+{
+  "processUserQuery": [
+    {
+      "data": [
+        {
+          "birth_date": "Tue, 01 Jan 1980 00:00:00 GMT",
+          "employee_number": 1001,
+          "first_name": "John",
+          "gender": "M",
+          "hire_date": "Sun, 23 May 2010 00:00:00 GMT",
+          "last_name": "Doe"
+        },
+        {
+          "birth_date": "Thu, 14 Feb 1985 00:00:00 GMT",
+          "employee_number": 1002,
+          "first_name": "Jane",
+          "gender": "F",
+          "hire_date": "Fri, 10 Jun 2011 00:00:00 GMT",
+          "last_name": "Smith"
+        },
+        {
+          "birth_date": "Sat, 10 Mar 1990 00:00:00 GMT",
+          "employee_number": 1003,
+          "first_name": "James",
+          "gender": "M",
+          "hire_date": "Sun, 15 Jul 2012 00:00:00 GMT",
+          "last_name": "Brown"
+        },
+        {
+          "birth_date": "Sat, 25 Apr 1992 00:00:00 GMT",
+          "employee_number": 1004,
+          "first_name": "Emily",
+          "gender": "F",
+          "hire_date": "Thu, 22 Aug 2013 00:00:00 GMT",
+          "last_name": "Johnson"
+        },
+        {
+          "birth_date": "Fri, 13 May 1983 00:00:00 GMT",
+          "employee_number": 1005,
+          "first_name": "Michael",
+          "gender": "M",
+          "hire_date": "Tue, 01 Sep 2009 00:00:00 GMT",
+          "last_name": "Williams"
+        },
+        {
+          "birth_date": "Wed, 06 Jun 1979 00:00:00 GMT",
+          "employee_number": 1006,
+          "first_name": "Robert",
+          "gender": "M",
+          "hire_date": "Thu, 10 Apr 2008 00:00:00 GMT",
+          "last_name": "Jones"
+        },
+        {
+          "birth_date": "Tue, 21 Jul 1987 00:00:00 GMT",
+          "employee_number": 1007,
+          "first_name": "Linda",
+          "gender": "F",
+          "hire_date": "Thu, 09 Jan 2014 00:00:00 GMT",
+          "last_name": "Taylor"
+        },
+        {
+          "birth_date": "Wed, 15 Aug 1984 00:00:00 GMT",
+          "employee_number": 1008,
+          "first_name": "David",
+          "gender": "M",
+          "hire_date": "Tue, 20 Nov 2007 00:00:00 GMT",
+          "last_name": "Anderson"
+        },
+        {
+          "birth_date": "Mon, 30 Sep 1991 00:00:00 GMT",
+          "employee_number": 1009,
+          "first_name": "Sarah",
+          "gender": "F",
+          "hire_date": "Tue, 03 Feb 2015 00:00:00 GMT",
+          "last_name": "Moore"
+        },
+        {
+          "birth_date": "Tue, 18 Oct 1988 00:00:00 GMT",
+          "employee_number": 1010,
+          "first_name": "Chris",
+          "gender": "M",
+          "hire_date": "Sat, 05 Mar 2016 00:00:00 GMT",
+          "last_name": "Martinez"
+        }
+      ],
+      "query": "give me a candidate details give me a candidate details",
+      "responseFormat": {
+        "columns": [
+          {
+            "columnDisplayName": "Employee Number",
+            "columnName": "employee_number"
+          },
+          {
+            "columnDisplayName": "First Name",
+            "columnName": "first_name"
+          },
+          {
+            "columnDisplayName": "Last Name",
+            "columnName": "last_name"
+          },
+          {
+            "columnDisplayName": "Department Name",
+            "columnName": "department_name"
+          }
+        ],
+        "type": "TABLE"
+      },
+      "sqlQuery": "SELECT\n    e.emp_no AS employee_number,\n    e.first_name AS first_name,\n    e.last_name AS last_name,\n    e.birth_date AS birth_date,\n    e.gender AS gender,\n    e.hire_date AS hire_date\nFROM\n    employees e;\n\n\n\nSELECT\n    e.emp_no AS employee_number,\n    e.first_name AS first_name,\n    e.last_name AS last_name,\n    d.dept_name AS department_name\nFROM\n    employees e\nJOIN\n    dept_emp de ON e.emp_no = de.emp_no\nJOIN\n    departments d ON de.dept_no = d.dept_no;\n\n\n\n\nSELECT\n    e.emp_no AS employee_number,\n    e.first_name AS first_name,\n    e.last_name AS last_name,\n    d.dept_name AS department_name\nFROM\n    employees e\nJOIN\n    (SELECT emp_no, dept_no FROM dept_emp WHERE to_date = '9999-01-01') de ON e.emp_no = de.emp_no\nJOIN\n    departments d ON de.dept_no = d.dept_no;",
+      "id": "60f0"
+    },
+    {
+      "id": "91fd",
+      "userId": "",
+      "message": "sda"
+    },
+    {
+      "id": "0323",
+      "userId": "adsad",
+      "message": "sda"
+    },
+    {
+      "id": "2ed5",
+      "userId": "",
+      "message": "sdda"
+    }
+  ]
+}

@@ -26,19 +26,21 @@ import { of } from 'rxjs';
 })
 export class ChatComponent {
   chatMessage: string = '';
+  userId: string = '';
   chatHistory: { user: string; bot: string; tableHeaders?: any[]; tableData?: any[] }[] = [];
   private loadingInterval: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   sendMessage() {
     if (this.chatMessage.trim()) {
+      console.log({userId: this.userId, message: this.chatMessage})
       const messageIndex = this.chatHistory.length;
       this.chatHistory.push({ user: this.chatMessage, bot: 'loading' });
 
       this.startLoadingAnimation(messageIndex);
       this.http
-        .post<any>('http://localhost:5000/processUserQuery', { message: this.chatMessage })
+        .post<any>('http://localhost:5000/processUserQuery', {userId: this.userId, message: this.chatMessage})
         .pipe(
           catchError((error) => {
             this.stopLoadingAnimation();
@@ -48,23 +50,25 @@ export class ChatComponent {
           })
         )
         .subscribe((response) => {
+          console.log("response", response)
           this.stopLoadingAnimation();
-          
-          if (response.responseFormat && response.responseFormat.columns) {
-            // If response contains table format
+          // Check if response contains table format
+          if (response?.responseFormat?.columns) {
             this.chatHistory[messageIndex] = {
               user: this.chatMessage,
               bot: '',
               tableHeaders: response.responseFormat.columns,
-              tableData: response.data
+              tableData: response.data,
             };
           } else {
             // Default text response
-            this.chatHistory[messageIndex].bot = response.response;
+            this.chatHistory[messageIndex].bot = response?.response || 'No response received';
           }
+
+          console.log(this.chatHistory);
         });
 
-      this.chatMessage = '';
+      // this.chatMessage = '';
     }
   }
 
